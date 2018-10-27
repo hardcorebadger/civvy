@@ -42,7 +42,6 @@ int main(int argc, const char * argv[]) {
     Window world_window(max_x-20, max_y, 0,0);
     Window inspector_window(20, 5, max_x-20, 0);
 
-
     Coord cursPos = {0,0};
     bool running = true;
     while (running) {

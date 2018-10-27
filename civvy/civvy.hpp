@@ -26,7 +26,6 @@ class GameController {
 public:
     GameController();
     static GameController* Instance();
-    void set_color(short overwrite, short r, short g, short b);
     int new_pair(short bg, short fg);
     TileInfo get_tile_info(int id);
     void initialize_tile_info_map();

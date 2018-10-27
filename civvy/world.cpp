@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <ncurses.h>
 #include <iostream>
+#include "PerlinNoise.hpp"
 
 World::World() {}
 
@@ -25,12 +26,19 @@ World::~World() {
 }
 
 void World::generate(int w, int h) {
+    double pscale = 0.07f;
+    const PerlinNoise perlin(2743.328f);
     tiles = new Tile*[w];
     for (int x = 0; x < w; x++) {
         tiles[x] = new Tile[h];
         for (int y = 0; y < h; y++) {
             Coord c{x,y};
-            int id = 1 + (rand() % 2);
+            double d = perlin.noise(pscale*x, pscale*y);
+            int id = 1;
+            if (d > -0.1)
+                id = 3;
+            if (d > 0.0)
+                id = 2;
             tiles[x][y] = Tile{c,id};
         }
     }

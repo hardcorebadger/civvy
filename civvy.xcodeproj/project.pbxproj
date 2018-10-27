@@ -40,6 +40,7 @@
 		291BD5E82183F63C00F0B3FA /* Render.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Render.cpp; sourceTree = "<group>"; };
 		291BD5EA2183F85400F0B3FA /* civvy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = civvy.hpp; sourceTree = "<group>"; };
 		291BD5EB21840D7F00F0B3FA /* civvy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = civvy.cpp; sourceTree = "<group>"; };
+		29FB9F5D21842B06004B209A /* PerlinNoise.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PerlinNoise.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +83,7 @@
 				291BD5E82183F63C00F0B3FA /* Render.cpp */,
 				291BD5EA2183F85400F0B3FA /* civvy.hpp */,
 				291BD5EB21840D7F00F0B3FA /* civvy.cpp */,
+				29FB9F5D21842B06004B209A /* PerlinNoise.hpp */,
 			);
 			path = civvy;
 			sourceTree = "<group>";

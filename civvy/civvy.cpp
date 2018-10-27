@@ -23,13 +23,12 @@ GameController::GameController() {
 }
 
 void GameController::initialize_tile_info_map() {
-    tile_info_map.insert(std::make_pair(1,TileInfo("Ocean", 1, Icon(COLOR_BLUE, COLOR_BLUE, ' '))));
-    tile_info_map.insert(std::make_pair(2,TileInfo("Plains", 2, Icon(COLOR_GREEN, COLOR_GREEN, ' '))));
+    // https://jonasjacek.github.io/colors/ to check colors
+    tile_info_map.insert(std::make_pair(1,TileInfo("Ocean", 1, Icon(24, 24, ' '))));
+    tile_info_map.insert(std::make_pair(2,TileInfo("Plains", 2, Icon(106, 106, ' '))));
+    tile_info_map.insert(std::make_pair(3,TileInfo("Sand", 3, Icon(3, 3, ' '))));
 }
 
-void GameController::set_color(short overwrite, short r, short g, short b) {
-    init_color(overwrite, r, g, b);
-}
 int GameController::new_pair(short bg, short fg) {
     this->cur_color++;
     init_pair(this->cur_color, fg, bg);
