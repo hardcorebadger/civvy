@@ -21,18 +21,7 @@ struct Icon;
 class Window;
 class RenderManager;
 class GameController;
-
-class GameController {
-public:
-    GameController();
-    static GameController* Instance();
-    int new_pair(short bg, short fg);
-    TileInfo get_tile_info(int id);
-    void initialize_tile_info_map();
-private:
-    int cur_color;
-    std::map<int, TileInfo> tile_info_map;
-};
+class WorldView;
 
 struct Icon {
     int col_pair;
@@ -65,9 +54,10 @@ public:
     World();
     ~World();
     void generate(int w, int h);
-    void render(const Window& window) const;
+    void render(const Window& window, Coord base_pos) const;
     Tile get_tile(Coord c);
     TileInfo get_tile_info(Coord c);
+    bool in_world(Coord c) const;
 };
 
 struct Coord {
@@ -75,6 +65,8 @@ struct Coord {
     int y;
     friend bool operator== (const Coord &c1, const Coord &c2);
     friend bool operator!= (const Coord &c1, const Coord &c2);
+    Coord operator+(const Coord& v) const;
+    Coord operator-(const Coord& v) const;
 };
 
 struct Tile {
@@ -93,6 +85,32 @@ public:
     }
     void render(const Window& window, Coord c) const;
     std::string get_name() const;
+};
+
+class WorldView {
+public:
+    WorldView();
+    void render(const Window& window, const World& world) const;
+    void update(const Window& window, const World& world, int key);
+    Coord get_base_pos() const;
+    Coord get_curs_pos() const;
+    Coord world_to_view(Coord c) const;
+private:
+    Coord base_pos;
+    Coord curs_pos;
+    Icon cursor;
+};
+
+class GameController {
+public:
+    GameController();
+    static GameController* Instance();
+    int new_pair(short bg, short fg);
+    TileInfo get_tile_info(int id);
+    void initialize_tile_info_map();
+private:
+    int cur_color;
+    std::map<int, TileInfo> tile_info_map;
 };
 
 #endif /* civvy_h */

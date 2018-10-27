@@ -35,6 +35,8 @@ int main(int argc, const char * argv[]) {
 
     World w;
     w.generate(100, 100);
+    
+    WorldView wv;
 
     int max_x, max_y;
     getmaxyx(stdscr, max_y, max_x);
@@ -42,37 +44,26 @@ int main(int argc, const char * argv[]) {
     Window world_window(max_x-20, max_y, 0,0);
     Window inspector_window(20, 5, max_x-20, 0);
 
-    Coord cursPos = {0,0};
     bool running = true;
     while (running) {
         werase(world_window.get_WINDOW());
-        w.render(world_window);
-        cursor.render(world_window, cursPos);
+        wv.render(world_window, w);
         wrefresh(world_window.get_WINDOW());
 
         werase(inspector_window.get_WINDOW());
         wborder(inspector_window.get_WINDOW(), '|', '|', '-', '-', '+', '+', '+', '+');
-        std::string s = w.get_tile_info(cursPos).get_name();
-        mvwprintw(inspector_window.get_WINDOW(),1,1,"(%d,%d): %s", cursPos.x, cursPos.y, s.c_str());
+        Coord cp = wv.get_curs_pos();
+        Coord bp = wv.get_base_pos();
+        std::string s = w.get_tile_info(cp).get_name();
+        mvwprintw(inspector_window.get_WINDOW(),1,1,"(%d,%d): %s", cp.x, cp.y, s.c_str());
         wrefresh(inspector_window.get_WINDOW());
-        int c = getch();
-        switch (c) {
-            case KEY_RIGHT:
-                cursPos.x++;
-                break;
-            case KEY_LEFT:
-                cursPos.x--;
-                break;
-            case KEY_UP:
-                cursPos.y--;
-                break;
-            case KEY_DOWN:
-                cursPos.y++;
-                break;
+        int key = getch();
+        switch (key) {
             case 27:
                 running = false;
                 break;
         }
+        wv.update(world_window, w, key);
         usleep(14000);
     }
     endwin();

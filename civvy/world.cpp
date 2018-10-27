@@ -26,6 +26,8 @@ World::~World() {
 }
 
 void World::generate(int w, int h) {
+    width = w;
+    height = h;
     double pscale = 0.07f;
     const PerlinNoise perlin(2743.328f);
     tiles = new Tile*[w];
@@ -34,26 +36,42 @@ void World::generate(int w, int h) {
         for (int y = 0; y < h; y++) {
             Coord c{x,y};
             double d = perlin.noise(pscale*x, pscale*y);
-            int id = 1;
+            int id = 5;
+            if (d > -0.33)
+                id = 1;
             if (d > -0.1)
                 id = 3;
             if (d > 0.0)
                 id = 2;
+            if (d > 0.3 && (rand()%2) == 0)
+                id = 4;
+            if (d > 0.5)
+                id = 4;
             tiles[x][y] = Tile{c,id};
         }
     }
 }
 
-void World::render(const Window& window) const {
-    for (int x = 0; x < window.get_width(); x++) {
-        for (int y = 0; y < window.get_height(); y++) {
+void World::render(const Window& window, Coord base_pos) const {
+    for (int x = base_pos.x; x < window.get_width()+base_pos.x; x++) {
+        for (int y = base_pos.y; y < window.get_height()+base_pos.y; y++) {
             Coord c{x,y};
-            GameController::Instance()->get_tile_info(this->tiles[x][y].id).render(window, c);
+            if (!this->in_world(c))
+                continue;
+            GameController::Instance()->get_tile_info(this->tiles[x][y].id).render(window, c-base_pos);
         }
     }
 }
 
+bool World::in_world(Coord c) const {
+    if (c.x < 0 || c.y < 0 || c.x >= width || c.y >= height)
+        return false;
+    return true;
+}
+
 Tile World::get_tile(Coord c) {
+    if (!this->in_world(c))
+        return Tile{c,0};
     return this->tiles[c.x][c.y];
 }
 
@@ -75,6 +93,9 @@ bool operator== (const Coord &c1, const Coord &c2) {
 bool operator!= (const Coord &c1, const Coord &c2) {
     return !(c1==c2);
 }
-bool operator< (const Coord &c1, const Coord &c2) {
-    return c1.x+c1.y < c2.x+c2.y;
+Coord Coord::operator+(const Coord& v) const {
+    return Coord{this->x+v.x, this->y+v.y};
+}
+Coord Coord::operator-(const Coord& v) const {
+    return Coord{this->x-v.x, this->y-v.y};
 }
